@@ -65,7 +65,7 @@ void AnimationPose::blend(const AnimationPose& pose)
         float sum_weight = m_weight.m_blend_weight[i] + pose.m_weight.m_blend_weight[i];
         if (sum_weight != 0)    //weight is greater equal than 0. thus we need to calc this bone_pose
         {
-            float cur_weight           = m_weight.m_blend_weight[i] / sum_weight;
+            float cur_weight           = 1 - m_weight.m_blend_weight[i] / sum_weight;
             m_weight.m_blend_weight[i] = cur_weight;
             bone_trans_one.m_position  = Vector3::lerp(bone_trans_one.m_position, bone_trans_two.m_position, cur_weight);
             bone_trans_one.m_scale = Vector3::lerp(bone_trans_one.m_scale, bone_trans_two.m_scale, cur_weight);
