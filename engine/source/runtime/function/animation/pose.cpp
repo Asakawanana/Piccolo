@@ -54,12 +54,24 @@ void AnimationPose::extractFromClip(std::vector<Transform>& bones, const Animati
 }
 
 
+//interpolate in curr pose and pose, two pose share same bone_poses
 void AnimationPose::blend(const AnimationPose& pose)
 {
     for (int i = 0; i < m_bone_poses.size(); i++)
     {
         auto&       bone_trans_one = m_bone_poses[i];
         const auto& bone_trans_two = pose.m_bone_poses[i];
+
+        float sum_weight = m_weight.m_blend_weight[i] + pose.m_weight.m_blend_weight[i];
+        if (sum_weight != 0)    //weight is greater equal than 0. thus we need to calc this bone_pose
+        {
+            float cur_weight           = m_weight.m_blend_weight[i] / sum_weight;
+            m_weight.m_blend_weight[i] = cur_weight;
+            bone_trans_one.m_position  = Vector3::lerp(bone_trans_one.m_position, bone_trans_two.m_position, cur_weight);
+            bone_trans_one.m_scale = Vector3::lerp(bone_trans_one.m_scale, bone_trans_two.m_scale, cur_weight);
+            bone_trans_one.m_rotation = Quaternion::sLerp(cur_weight, bone_trans_one.m_rotation, bone_trans_two.m_rotation);
+        }
+
 
         // float sum_weight =
         // if (sum_weight != 0)
