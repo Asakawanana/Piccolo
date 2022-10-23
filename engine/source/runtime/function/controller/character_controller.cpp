@@ -48,14 +48,15 @@ namespace Pilot
 
         Vector3 final_position = current_position;
 
+        //we change touch ground function to raycast, not use sweep. it may cause other problems, but we do not care in this quiz
+        /*
         m_is_touch_ground = physics_scene->sweep(
             m_rigidbody_shape,
             world_transform.getMatrix(),
             Vector3::NEGATIVE_UNIT_Z,
             0.105f,
             hits);
-
-        hits.clear();
+        */
         
         world_transform.m_position -= 0.1f * Vector3::UNIT_Z;
 
@@ -90,6 +91,15 @@ namespace Pilot
         {
             final_position += horizontal_displacement;
         }
+        hits.clear();
+
+        //test if is on ground in here
+        m_is_touch_ground = physics_scene->raycast(final_position - Vector3(0, 0, 0.01f), Vector3::NEGATIVE_UNIT_Z, 0.01f, hits);
+        if (!m_is_touch_ground && vertical_direction.z <= 0.0f)
+            final_position += vertical_displacement;
+
+        hits.clear();
+
 
         return final_position;
     }
