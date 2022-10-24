@@ -55,6 +55,7 @@ namespace Piccolo
 
         Vector3 m_desired_displacement;
         Vector3 m_desired_horizontal_move_direction;
+        META(Enable)
         Vector3 m_jump_initial_velocity;
         Vector3 m_target_position;
 
